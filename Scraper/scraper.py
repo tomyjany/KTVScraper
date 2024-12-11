@@ -1,4 +1,5 @@
 import requests
+import json
 import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -141,15 +142,32 @@ class Scraper:
                                     "metadata": [metadata]
                                 }
         return login_counts
-    def count_all_activities(self):
-        pass
+    def count_all_activities_for_year(self, week_start, week_end):
+        """This method will count how many times the user has logged in for each unique title for the entire year"""
+        all_activities = {}
+        for week_number in range(week_start, week_end + 1):
+            activities = self.count_logged_in_activities(week_number)
+            for title, data in activities.items():
+                if title in all_activities:
+                    all_activities[title]["count"] += data["count"]
+                    all_activities[title]["metadata"].extend(data["metadata"])
+                else:
+                    all_activities[title] = data
+        return all_activities
+    def count_all_activities_and_save_to_json(self, week_start, week_end):
+        """This method will count how many times the user has logged in for each unique title for the entire year and save the metadata to a JSON file"""
+        all_activities = self.count_all_activities_for_year(week_start, week_end)
+        with open("activities.json", "w") as f:
+            json.dump(all_activities, f, indent=4)
+        return all_activities
     
 
 
 
 if __name__ == "__main__":
     scraper = Scraper()
-    print(scraper.count_logged_in_activities(49))
+    # print(scraper.count_logged_in_activities(49))
+    scraper.count_all_activities_and_save_to_json(30, 49)
 
 
 
