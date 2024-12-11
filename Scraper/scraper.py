@@ -117,7 +117,7 @@ class Scraper:
                 date = date.strip()
             
             rows = soup.find_all("div", class_="c-asc-table__row")
-            for row in rows:1
+            for row in rows:
                 elements = row.find_all("div", class_="c-asc-table__item--activity")
                 for element in elements:
                     span = element.find("span", class_="c-asc-table__info-detail")
