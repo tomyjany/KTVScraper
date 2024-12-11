@@ -107,40 +107,41 @@ class Scraper:
         if html_content:
             soup = BeautifulSoup(html_content, "html.parser")
             
-            # Extract the day of the week and date
-            header = soup.find("div", class_="c-asc-table__head")
-            if header:
-                print("found header: ", header)
-                day_info = header.find("div", class_="c-asc-table__sidebar-col").get_text(strip=False)
-                print("day_info: ", day_info.strip())
-                day_of_week, date = day_info.split(' ', 1)
-                day_of_week = day_of_week.strip()
-                date = date.strip()
-            
-            rows = soup.find_all("div", class_="c-asc-table__row")
-            for row in rows:
-                elements = row.find_all("div", class_="c-asc-table__item--activity")
-                for element in elements:
-                    span = element.find("span", class_="c-asc-table__info-detail")
-                    if span:
-                        title = span.get_text(strip=True)
-                        if "c-asc-table__item--logged-in" in element['class']:
-                            ul = element.find("ul", class_="c-asc-table__list")
-                            time_text = ul.find("li").get_text(strip=True) if ul else "N/A"
-                            metadata = {
-                                "week": week_number,
-                                "day_of_week": day_of_week,
-                                "date": date,
-                                "time": time_text
-                            }
-                            if title in login_counts:
-                                login_counts[title]["count"] += 1
-                                login_counts[title]["metadata"].append(metadata)
-                            else:
-                                login_counts[title] = {
-                                    "count": 1,
-                                    "metadata": [metadata]
+            # Iterate over each day
+            days = soup.find_all("div", class_="c-asc-table__day")
+            for day in days:
+                # Extract the day of the week and date
+                header = day.find("div", class_="c-asc-table__head")
+                if header:
+                    day_info = header.find("div", class_="c-asc-table__sidebar-col").get_text(strip=False)
+                    day_of_week, date = day_info.split(' ', 1)
+                    day_of_week = day_of_week.strip()
+                    date = date.strip()
+                
+                rows = day.find_all("div", class_="c-asc-table__row")
+                for row in rows:
+                    elements = row.find_all("div", class_="c-asc-table__item--activity")
+                    for element in elements:
+                        span = element.find("span", class_="c-asc-table__info-detail")
+                        if span:
+                            title = span.get_text(strip=True)
+                            if "c-asc-table__item--logged-in" in element['class']:
+                                ul = element.find("ul", class_="c-asc-table__list")
+                                time_text = ul.find("li").get_text(strip=True) if ul else "N/A"
+                                metadata = {
+                                    "week": week_number,
+                                    "day_of_week": day_of_week,
+                                    "date": date,
+                                    "time": time_text
                                 }
+                                if title in login_counts:
+                                    login_counts[title]["count"] += 1
+                                    login_counts[title]["metadata"].append(metadata)
+                                else:
+                                    login_counts[title] = {
+                                        "count": 1,
+                                        "metadata": [metadata]
+                                    }
         return login_counts
     def count_all_activities_for_year(self, week_start, week_end):
         """This method will count how many times the user has logged in for each unique title for the entire year"""
@@ -157,8 +158,8 @@ class Scraper:
     def count_all_activities_and_save_to_json(self, week_start, week_end):
         """This method will count how many times the user has logged in for each unique title for the entire year and save the metadata to a JSON file"""
         all_activities = self.count_all_activities_for_year(week_start, week_end)
-        with open("activities.json", "w") as f:
-            json.dump(all_activities, f, indent=4)
+        with open("activities.json", "w", encoding="utf-8") as f:
+            json.dump(all_activities, f, indent=4, ensure_ascii=False)
         return all_activities
     
 
