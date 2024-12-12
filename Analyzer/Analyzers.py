@@ -70,7 +70,7 @@ class MostOftenMonth(Analyzer):
         for activity, details in data.items():
             month_counts = {}
             for metadata in details['metadata']:
-                month = metadata['date'].split()[0]
+                month = metadata['date'].split('.')[1]
                 if month in month_counts:
                     month_counts[month] += 1
                 else:
