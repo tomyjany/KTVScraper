@@ -46,7 +46,6 @@ $ python -m Analyzer --analyzer AveragePerWeek
 {'ASC posilovna': 2.6923076923076925}
 
 $ python -m Analyzer
-{'AveragePerWeek': {'ASC posilovna': 2.6923076923076925}, 'MostOftenTime': {'ASC posilovna': '14:00 - 18:00'}, 'MostOftenDay': {'ASC posilovna': 'Čtvrtek'}, 'MostOftenWeekday': {'ASC posilovna': 'Čtvrtek'}, 'MostOftenWeekend': {'ASC posilovna': 'Neděle'}, 'MostOftenMonth': {'ASC posilovna': '11'}}
-(.venv) (base) [tomja@a130 KTVScraper]$ 
+{'AveragePerWeek': {'ASC posilovna': 2.6923076923076925}, 'MostOftenTime': {'ASC posilovna': '14:00 - 18:00'}, 'MostOftenDay': {'ASC posilovna': 'Čtvrtek'}, 'MostOftenWeekday': {'ASC posilovna': 'Čtvrtek'}, 'MostOftenWeekend': {'ASC posilovna': 'Neděle'}, 'MostOftenMonth': {'ASC posilovna': '11'}} 
 ```
 
